@@ -1,5 +1,8 @@
 @use '@/styles/variables' as *;
 
 .footer {
-    display: block;
+    display: flex;
+    align-items: center;
+    padding: 0 $side-padding;
+    height: $footer-height;
 }

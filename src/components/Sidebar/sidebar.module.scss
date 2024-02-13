@@ -1,5 +1,5 @@
 @use '@/styles/variables' as *;
 
 .sidebar {
-    display: block;
+    padding: $side-padding;
 }
