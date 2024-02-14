@@ -1,5 +1,3 @@
-import { commonConfig } from '@/config';
-
 type MethodType = 'GET' | 'PUT' | 'POST';
 
 interface IMakeRequest {
@@ -34,8 +32,7 @@ export const makeRequest = async ({
     if (params) {
         options['body'] = JSON.stringify(params);
     }
-    const apiUrl = `${commonConfig.apiEndpoint}${url}`;
-    const response = await fetch(apiUrl, options);
+    const response = await fetch(url, options);
     if (response) {
         const data = await response.json();
         return data;

@@ -7,10 +7,17 @@ import {
 import { RootState } from "@/appStore/store";
 
 import { makeRequest } from "@/utils";
+import { commonConfig } from '@/config';
 
 /*
     We define state structure
 */
+interface IModulesDataCell {
+    data: IModules[];
+    pagination: {
+        currentPage: number;
+    }
+};
 interface IModules {
     test: string;
 };
@@ -21,12 +28,17 @@ export enum Status {
     failed = 'failed'
 };
 interface initialStateType {
-    modules: IModules[];
+    modules: IModulesDataCell;
     status: Status.idle | Status.loading | Status.succeeded | Status.failed;
     error: string | null;
 };
 const initialState: initialStateType = {
-    modules: [],
+    modules: {
+        data: [],
+        pagination: {
+            currentPage: 1
+        }
+    },
     status: Status.idle,
     error: null
 };
@@ -34,7 +46,9 @@ const initialState: initialStateType = {
 /*
     Load users data from the server
 */
-export const fetchBowerModules = createAsyncThunk('bower_modules/fetchBowerModules', async (url: string) => {
+export const fetchBowerModules = createAsyncThunk('bower_modules/fetchBowerModules', async (searchTerm: string) => {
+    // https://libraries.io/api/search?q=grunt&page=1&per_page=5&api_key=3b9105ec36ec3f4d878033ead704a6e8
+    const url = `${commonConfig.apiEndpoint}=${searchTerm}&page=1&per_page=5&sort=stars&api_key=${commonConfig.apiKey}`;
     const modulesData = await makeRequest({
         url
     });
@@ -60,7 +74,8 @@ export const bowerModulesSlice = createSlice({
             .addCase(fetchBowerModules.fulfilled, (state, action: PayloadAction<IModules[]>) => {
                 state.status = Status.succeeded;
                 const modules = action.payload;
-                state.modules = modules;
+                console.log('modules: ', modules);
+                state.modules.data = modules;
             })
     }
 });

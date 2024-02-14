@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef } from 'react';
 import styles from './search_form.module.scss';
 
 interface ISearchFormProps {
@@ -9,11 +9,11 @@ export const SearchForm = ({
     onSubmitSearch
 }: ISearchFormProps): JSX.Element => {
     const searchInputElement = useRef<any>(null);
-    const submitSearch = useCallback((event: React.ChangeEvent<HTMLFormElement>) => {
+    const submitSearch = (event: React.ChangeEvent<HTMLFormElement>): void => {
         event.preventDefault();
         const searchTerm = searchInputElement.current?.value;
         onSubmitSearch(searchTerm);
-    }, []);
+    }
     return (
         <form
             className={styles.search_form}

@@ -8,7 +8,7 @@ interface IModulesTableConfig {
 };
 
 export const commonConfig: ICommonConfig = {
-    apiEndpoint: 'https://libraries.io/api',
+    apiEndpoint: 'https://libraries.io/api/search?q',
     apiKey: '3b9105ec36ec3f4d878033ead704a6e8',
 };
 
