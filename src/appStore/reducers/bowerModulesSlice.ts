@@ -12,14 +12,19 @@ import { commonConfig } from '@/config';
 /*
     We define state structure
 */
+export interface IPagination {
+    currentPage: number;
+    recordsCount: number;
+    recordsPerPage: number;
+};
 interface IModulesDataCell {
     data: IModules[];
-    pagination: {
-        currentPage: number;
-    }
+    pagination: IPagination;
 };
 interface IModules {
-    test: string;
+    name: string;
+    repository_url: string;
+    stars: number;
 };
 export enum Status {
     idle = 'idle',
@@ -36,7 +41,9 @@ const initialState: initialStateType = {
     modules: {
         data: [],
         pagination: {
-            currentPage: 1
+            currentPage: 1,
+            recordsCount: 0,
+            recordsPerPage: 5,
         }
     },
     status: Status.idle,
@@ -47,8 +54,7 @@ const initialState: initialStateType = {
     Load users data from the server
 */
 export const fetchBowerModules = createAsyncThunk('bower_modules/fetchBowerModules', async (searchTerm: string) => {
-    // https://libraries.io/api/search?q=grunt&page=1&per_page=5&api_key=3b9105ec36ec3f4d878033ead704a6e8
-    const url = `${commonConfig.apiEndpoint}=${searchTerm}&page=1&per_page=5&sort=stars&api_key=${commonConfig.apiKey}`;
+    const url = `${commonConfig.apiEndpoint}=${searchTerm}&sort=stars&api_key=${commonConfig.apiKey}`;
     const modulesData = await makeRequest({
         url
     });
@@ -73,9 +79,13 @@ export const bowerModulesSlice = createSlice({
             })
             .addCase(fetchBowerModules.fulfilled, (state, action: PayloadAction<IModules[]>) => {
                 state.status = Status.succeeded;
-                const modules = action.payload;
-                console.log('modules: ', modules);
-                state.modules.data = modules;
+                const mappedModules = action.payload.map(moduleInstance => ({
+                    name: moduleInstance.name,
+                    repository_url: moduleInstance.repository_url,
+                    stars: moduleInstance.stars,
+                }));
+                state.modules.data = mappedModules;
+                state.modules.pagination.recordsCount = mappedModules.length;
             })
     }
 });

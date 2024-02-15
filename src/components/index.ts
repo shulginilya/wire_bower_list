@@ -1,5 +1,4 @@
-export * from './Spinner';
 export * from './Header';
 export * from './Footer';
 export * from './Sidebar';
-export * from './SearchForm';
+export * from './ModulesTable';

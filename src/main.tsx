@@ -5,7 +5,7 @@ import { store } from "@/appStore/store";
 import App from "@/App";
 import {
 	Spinner,
-} from '@/components';
+} from '@/shared_components';
 import 'sanitize.css';
 import '@/styles/reset.scss';
 import '@/styles/global.scss';
