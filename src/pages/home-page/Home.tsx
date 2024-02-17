@@ -1,5 +1,5 @@
 import { MainLayout } from "@/layouts";
-import { ModulesTable } from "@/components";
+import { BowerModules } from "@/components";
 
 import styles from './home.module.scss';
 
@@ -9,7 +9,7 @@ export const Home = (): JSX.Element => (
             className={styles.home}
             data-testid="homepage_root"
         >
-            <ModulesTable />
+            <BowerModules />
         </div>
     </MainLayout>
 );

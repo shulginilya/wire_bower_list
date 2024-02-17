@@ -13,12 +13,12 @@ import {
 import {
 	fetchBowerModules,
     selectData,
-    Status,
 } from "@/appStore/reducers/bowerModulesSlice";
+import { NetworkResponseStatus } from "@/appStore/reducers/bowerModulesSlice.data";
 
-import styles from './modules_table.module.scss';
+import styles from './bower_modules.module.scss';
 
-export const ModulesTable = (): JSX.Element => {
+export const BowerModules = (): JSX.Element => {
     const dispatch = useAppDispatch();
     const { modules } = useAppSelector(selectData);
     /*
@@ -59,18 +59,18 @@ export const ModulesTable = (): JSX.Element => {
     };
     return (
         <div
-            className={styles.modules_section}
-            data-testid="modules_table_root"
+            className={styles.bower_modules}
+            data-testid="bower_modules_root"
         >
             <SearchForm
                 onSubmitSearch={onSubmitSearchHandler}
             />
-            <div className={styles.modules_section__tbl}>
+            <div className={styles.bower_modules__tbl}>
                 <Table { ...tableProps } />
             </div>
             <Pagination { ...modules.pagination } />
             {
-                modules.status === Status.loading && <Spinner />
+                modules.status === NetworkResponseStatus.loading && <Spinner />
             }
         </div>
     )

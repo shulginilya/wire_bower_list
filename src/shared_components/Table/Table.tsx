@@ -1,9 +1,10 @@
-import type { IModules, ITableHeaders } from '@/appStore/reducers/bowerModulesSlice';
+import type { IBowerModules } from '@/components';
+import type { ITableHeaders } from './Table.types';
 import styles from './table.module.scss';
 
 interface ITable {
     headers: ITableHeaders[];
-    items: IModules[];
+    items: IBowerModules[];
     resourseName: string;
 };
 
@@ -44,7 +45,7 @@ export const Table = ({
                 </tr>
             )
         }
-        return items.map((tblRowData: IModules, key: number) => {
+        return items.map((tblRowData: IBowerModules, key: number) => {
             const tblRowKey = `${resourseName}_tbl_row_${key}`;
             const generateTblCells = () => (
                 Object.keys(tblRowData).map((v) => (
@@ -53,7 +54,7 @@ export const Table = ({
                             key={`${tblRowKey}_cell_${v}`}
                             className={styles.table__rows__cell}
                         >
-                            {tblRowData[v as keyof IModules]}
+                            {tblRowData[v as keyof IBowerModules]}
                         </td>
                     )
                 ))

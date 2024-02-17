@@ -1,3 +1,7 @@
+import type { IBowerModules } from "@/components";
+import type { initialStateType } from "./bowerModulesSlice.types";
+import { NetworkResponseStatus } from "./bowerModulesSlice.data";
+
 import {
     createSlice,
     createAsyncThunk,
@@ -12,35 +16,6 @@ import { commonConfig } from '@/config';
 /*
     We define state structure
 */
-export interface ITableHeaders {
-    key: string;
-    title: string;
-};
-export interface IPagination {
-    currentPage: number;
-    recordsCount: number;
-    recordsPerPage: number;
-};
-interface IModulesDataCell {
-    data: IModules[];
-    pagination: IPagination;
-    status: Status.idle | Status.loading | Status.succeeded | Status.failed;
-    error: string | null;
-};
-export interface IModules {
-    name: string;
-    repository_url: string;
-    stars: number;
-};
-export enum Status {
-    idle = 'idle',
-    loading = 'loading',
-    succeeded = 'succeeded',
-    failed = 'failed'
-};
-interface initialStateType {
-    modules: IModulesDataCell;
-};
 const paginationConfig = {
     recordsPerPage: 5
 };
@@ -52,7 +27,7 @@ const initialState: initialStateType = {
             recordsCount: 0,
             recordsPerPage: paginationConfig.recordsPerPage,
         },
-        status: Status.idle,
+        status: NetworkResponseStatus.idle,
         error: ''
     },
 };
@@ -78,14 +53,14 @@ export const bowerModulesSlice = createSlice({
     extraReducers(builder) {
         builder
             .addCase(fetchBowerModules.pending, (state) => {
-                state.modules.status = Status.loading;
+                state.modules.status = NetworkResponseStatus.loading;
             })
             .addCase(fetchBowerModules.rejected, (state) => {
-                state.modules.status = Status.failed;
+                state.modules.status = NetworkResponseStatus.failed;
                 state.modules.error = 'api error';
             })
-            .addCase(fetchBowerModules.fulfilled, (state, action: PayloadAction<IModules[]>) => {
-                state.modules.status = Status.succeeded;
+            .addCase(fetchBowerModules.fulfilled, (state, action: PayloadAction<IBowerModules[]>) => {
+                state.modules.status = NetworkResponseStatus.succeeded;
                 const initModules = action.payload;
                 const mappedModules = initModules.slice(0, paginationConfig.recordsPerPage).map(moduleInstance => ({
                     name: moduleInstance.name,
