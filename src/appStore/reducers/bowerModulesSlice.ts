@@ -11,21 +11,18 @@ import {
 import { RootState } from "@/appStore/store";
 
 import { makeRequest } from "@/utils";
-import { commonConfig } from '@/config';
+import { resourceFetchConfig, modulesTableConfig } from '@/config';
 
 /*
     We define state structure
 */
-const paginationConfig = {
-    recordsPerPage: 5
-};
 const initialState: initialStateType = {
     modules: {
         data: [],
         pagination: {
             currentPage: 1,
             recordsCount: 0,
-            recordsPerPage: paginationConfig.recordsPerPage,
+            recordsPerPage: modulesTableConfig.recordsPerPage,
         },
         status: NetworkResponseStatus.idle,
         error: ''
@@ -36,7 +33,7 @@ const initialState: initialStateType = {
     Load users data from the server
 */
 export const fetchBowerModules = createAsyncThunk('bower_modules/fetchBowerModules', async (searchTerm: string) => {
-    const url = `${commonConfig.apiEndpoint}=${searchTerm}&sort=stars&api_key=${commonConfig.apiKey}`;
+    const url = `${resourceFetchConfig.apiEndpoint}=${searchTerm}&sort=stars&api_key=${resourceFetchConfig.apiKey}`;
     const modulesData = await makeRequest({
         url
     });
@@ -62,7 +59,7 @@ export const bowerModulesSlice = createSlice({
             .addCase(fetchBowerModules.fulfilled, (state, action: PayloadAction<IBowerModules[]>) => {
                 state.modules.status = NetworkResponseStatus.succeeded;
                 const initModules = action.payload;
-                const mappedModules = initModules.slice(0, paginationConfig.recordsPerPage).map(moduleInstance => ({
+                const mappedModules = initModules.slice(0, modulesTableConfig.recordsPerPage).map(moduleInstance => ({
                     name: moduleInstance.name,
                     repository_url: moduleInstance.repository_url,
                     stars: moduleInstance.stars,
