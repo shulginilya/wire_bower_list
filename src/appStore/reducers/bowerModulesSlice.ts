@@ -12,6 +12,10 @@ import { commonConfig } from '@/config';
 /*
     We define state structure
 */
+export interface ITableHeaders {
+    key: string;
+    title: string;
+};
 export interface IPagination {
     currentPage: number;
     recordsCount: number;
@@ -20,8 +24,10 @@ export interface IPagination {
 interface IModulesDataCell {
     data: IModules[];
     pagination: IPagination;
+    status: Status.idle | Status.loading | Status.succeeded | Status.failed;
+    error: string | null;
 };
-interface IModules {
+export interface IModules {
     name: string;
     repository_url: string;
     stars: number;
@@ -34,8 +40,9 @@ export enum Status {
 };
 interface initialStateType {
     modules: IModulesDataCell;
-    status: Status.idle | Status.loading | Status.succeeded | Status.failed;
-    error: string | null;
+};
+const paginationConfig = {
+    recordsPerPage: 5
 };
 const initialState: initialStateType = {
     modules: {
@@ -43,11 +50,11 @@ const initialState: initialStateType = {
         pagination: {
             currentPage: 1,
             recordsCount: 0,
-            recordsPerPage: 5,
-        }
+            recordsPerPage: paginationConfig.recordsPerPage,
+        },
+        status: Status.idle,
+        error: ''
     },
-    status: Status.idle,
-    error: null
 };
 
 /*
@@ -71,21 +78,22 @@ export const bowerModulesSlice = createSlice({
     extraReducers(builder) {
         builder
             .addCase(fetchBowerModules.pending, (state) => {
-                state.status = Status.loading;
+                state.modules.status = Status.loading;
             })
             .addCase(fetchBowerModules.rejected, (state) => {
-                state.status = Status.failed;
-                state.error = 'api error';
+                state.modules.status = Status.failed;
+                state.modules.error = 'api error';
             })
             .addCase(fetchBowerModules.fulfilled, (state, action: PayloadAction<IModules[]>) => {
-                state.status = Status.succeeded;
-                const mappedModules = action.payload.map(moduleInstance => ({
+                state.modules.status = Status.succeeded;
+                const initModules = action.payload;
+                const mappedModules = initModules.slice(0, paginationConfig.recordsPerPage).map(moduleInstance => ({
                     name: moduleInstance.name,
                     repository_url: moduleInstance.repository_url,
                     stars: moduleInstance.stars,
                 }));
                 state.modules.data = mappedModules;
-                state.modules.pagination.recordsCount = mappedModules.length;
+                state.modules.pagination.recordsCount = initModules.length;
             })
     }
 });

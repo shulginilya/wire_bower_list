@@ -5,7 +5,9 @@ import { Table } from './Table';
 describe('Modules table', () => {
     it('should render modules table', () => {
         const testModulesTableProps = {
-            test: 'test'
+            headers: [],
+            items: [],
+            resourseName: 'test',
         };
         render(<Table {...testModulesTableProps} />);
         const modulesTableWrapper = screen.getByTestId('modules_table_root');

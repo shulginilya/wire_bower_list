@@ -1,5 +1,9 @@
 @use '@/styles/variables' as *;
 
-.modules_table {
-    display: block;
+.modules_section {
+    position: relative;
+    padding: 10px;
+    &__tbl {
+        margin: 10px 0 10px 0; 
+    }
 }

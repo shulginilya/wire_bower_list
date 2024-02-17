@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import {
     Pagination,
     Table,
     SearchForm,
+    Spinner,
 } from "@/shared_components";
 
 import {
@@ -11,23 +13,25 @@ import {
 import {
 	fetchBowerModules,
     selectData,
+    Status,
 } from "@/appStore/reducers/bowerModulesSlice";
 
 import styles from './modules_table.module.scss';
 
 export const ModulesTable = (): JSX.Element => {
     const dispatch = useAppDispatch();
-    const {
-		modules,
-		status,
-	} = useAppSelector(selectData);
-    console.log('modules: ', modules);
-    console.log('status: ', status);
+    const { modules } = useAppSelector(selectData);
+    /*
+        Fetch initial data
+        !!! refactor that , avoid double server hit !!!
+    */
+    useEffect(() => {
+        dispatch(fetchBowerModules(''));
+    }, []);
     /*
         Search form submit handler
     */
     const onSubmitSearchHandler = (searchTerm: string | undefined): void => {
-        console.log('searchTerm: ', searchTerm);
         if (searchTerm) {
             dispatch(fetchBowerModules(searchTerm));
         }
@@ -36,18 +40,38 @@ export const ModulesTable = (): JSX.Element => {
         Modules table props
     */
     const tableProps = {
-        test: 'test',
+        headers: [
+            {
+                key: "name",
+                title: "Name",
+            },
+            {
+                key: "repository_url",
+                title: "Repository Url",
+            },
+            {
+                key: "stars",
+                title: "Stars",
+            }
+        ],
+        items: modules.data,
+        resourseName: 'modules',
     };
     return (
         <div
-            className={styles.modules_table}
+            className={styles.modules_section}
             data-testid="modules_table_root"
         >
             <SearchForm
                 onSubmitSearch={onSubmitSearchHandler}
             />
-            <Table { ...tableProps } />
+            <div className={styles.modules_section__tbl}>
+                <Table { ...tableProps } />
+            </div>
             <Pagination { ...modules.pagination } />
+            {
+                modules.status === Status.loading && <Spinner />
+            }
         </div>
     )
 };

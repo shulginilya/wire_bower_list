@@ -1,5 +1,60 @@
 @use '@/styles/variables' as *;
 
+@mixin common_td_th {
+    border-top: 1px solid $extra-light-grey;
+    padding: 10px;
+}
+
+@mixin common_td {
+    border-left: 1px solid $extra-light-grey;
+    border-right: 1px solid $extra-light-grey;
+    font-size: 13px;
+}
+
+@mixin common_th {
+    font-size: 14px;
+    background-color: $light-green;
+    border: 1px solid $light-green;
+}
+
 .table {
-    display: block;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    overflow: hidden;
+    &__headers {
+        &__cell {
+            @include common_td_th();
+            @include common_th();
+        }
+    }
+    &__rows {
+        &__cell {
+            @include common_td_th();
+            @include common_td();
+        }
+        &:nth-of-type(even) {
+            td {
+                background-color: lighten($light-green, 35%);
+            }
+        }
+        &:last-child {
+            td {
+                border-bottom: 1px solid $extra-light-grey;
+            }
+        }
+    }
+    &__empty {
+        &__cell {
+            @include common_td_th();
+            @include common_td();
+            text-align: center;
+            font-weight: 600;
+        }
+        &:last-child {
+            td {
+                border-bottom: 1px solid $extra-light-grey;
+            }
+        }
+    }
 }
