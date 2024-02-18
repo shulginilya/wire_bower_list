@@ -1,12 +1,9 @@
 import type { IBowerModules } from '@/components';
-import type { ITableHeaders } from './Table.types';
+import type {
+    ITableHeaders,
+    ITable,
+} from './Table.types';
 import styles from './table.module.scss';
-
-interface ITable {
-    headers: ITableHeaders[];
-    items: IBowerModules[];
-    resourseName: string;
-};
 
 export const Table = ({
     headers,

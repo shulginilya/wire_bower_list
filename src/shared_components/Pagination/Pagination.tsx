@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { IPagination } from '@/appStore/reducers/bowerModulesSlice'; 
+import type { IPagination } from './Pagination.types'; 
 
 import styles from './pagination.module.scss';
 

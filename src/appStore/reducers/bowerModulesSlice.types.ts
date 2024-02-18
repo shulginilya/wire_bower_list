@@ -6,7 +6,7 @@ export interface IBowerModulesDataCell {
     data: IBowerModules[];
     pagination: IPagination;
     status: NetworkResponseStatus.idle | NetworkResponseStatus.loading | NetworkResponseStatus.succeeded | NetworkResponseStatus.failed;
-    error: string | null;
+    error: string;
 };
 
 export interface initialStateType {

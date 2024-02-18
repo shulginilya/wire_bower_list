@@ -65,10 +65,18 @@ export const BowerModules = (): JSX.Element => {
             <SearchForm
                 onSubmitSearch={onSubmitSearchHandler}
             />
-            <div className={styles.bower_modules__tbl}>
-                <Table { ...tableProps } />
-            </div>
-            <Pagination { ...modules.pagination } />
+            {
+                modules.error ? (
+                    <div className={styles.bower_modules__error}>{modules.error}</div>
+                ) : (
+                    <>
+                        <div className={styles.bower_modules__tbl}>
+                            <Table { ...tableProps } />
+                        </div>
+                        <Pagination { ...modules.pagination } />
+                    </>
+                )
+            }
             {
                 modules.status === NetworkResponseStatus.loading && <Spinner />
             }

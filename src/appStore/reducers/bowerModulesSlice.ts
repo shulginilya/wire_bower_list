@@ -54,7 +54,7 @@ export const bowerModulesSlice = createSlice({
             })
             .addCase(fetchBowerModules.rejected, (state) => {
                 state.modules.status = NetworkResponseStatus.failed;
-                state.modules.error = 'api error';
+                state.modules.error = 'API endpoint error';
             })
             .addCase(fetchBowerModules.fulfilled, (state, action: PayloadAction<IBowerModules[]>) => {
                 state.modules.status = NetworkResponseStatus.succeeded;

@@ -1,14 +1,12 @@
 import { useRef } from 'react';
-import styles from './search_form.module.scss';
+import type { ISearchFormProps } from './SearchForm.types';
 
-interface ISearchFormProps {
-    onSubmitSearch: (searchTerm: string | undefined) => void;
-};
+import styles from './search_form.module.scss';
 
 export const SearchForm = ({
     onSubmitSearch
 }: ISearchFormProps): JSX.Element => {
-    const searchInputElement = useRef<any>(null);
+    const searchInputElement = useRef<HTMLInputElement>(null);
     const submitSearch = (event: React.ChangeEvent<HTMLFormElement>): void => {
         event.preventDefault();
         const searchTerm = searchInputElement.current?.value;
