@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { IPagination } from './Pagination.types'; 
+import type { IPaginationComponent } from './Pagination.types'; 
 
 import styles from './pagination.module.scss';
 
@@ -7,7 +7,8 @@ export const Pagination = ({
     currentPage,
     recordsPerPage,
     recordsCount,
-}: IPagination): JSX.Element => {
+    onPaginateHandler,
+}: IPaginationComponent): JSX.Element => {
     const pages = useMemo((): number[] => {
         if (!recordsCount) {
             return [];
@@ -20,14 +21,15 @@ export const Pagination = ({
         return pagesArray;
     }, [currentPage, recordsCount]);
     const renderPagination = useMemo((): JSX.Element => {
-        const pageItems = pages.map(p => (
+        const pageItems = pages.map(page => (
             <li
-                key={`page_${p}`}
+                key={`page_${page}`}
                 className={styles.pagination__list__item}
             >
                 <button
-                    className={(currentPage === p) ? `${styles.pagination__list__item__link} ${styles.pagination__list__item__link_active}` : styles.pagination__list__item__link}
-                >{p}</button>
+                    className={(currentPage === page) ? `${styles.pagination__list__item__link} ${styles.pagination__list__item__link_active}` : styles.pagination__list__item__link}
+                    onClick={() => onPaginateHandler(page)}
+                >{page}</button>
             </li>
         ));
         return (

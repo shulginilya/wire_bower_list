@@ -5,6 +5,6 @@ export const Footer = (): JSX.Element => (
         className={styles.footer}
         data-testid="footer_root"
     >
-        footer
+        footer content placeholder
     </div>
 );

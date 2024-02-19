@@ -3,3 +3,7 @@ export interface IPagination {
     recordsCount: number;
     recordsPerPage: number;
 };
+
+export interface IPaginationComponent extends IPagination {
+    onPaginateHandler: (page: number) => void;
+};

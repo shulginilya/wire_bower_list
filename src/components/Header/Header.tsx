@@ -5,6 +5,6 @@ export const Header = (): JSX.Element => (
         className={styles.header}
         data-testid="header_root"
     >
-        header
+        header content placeholder
     </div>
 );

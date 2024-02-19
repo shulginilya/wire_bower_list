@@ -1,5 +1,6 @@
 import type { IBowerModules } from "@/components";
-import type { initialStateType } from "./bowerModulesSlice.types";
+import type { initialStateType, IFetchBowerModulesParams } from "./bowerModulesSlice.types";
+import { buildSortingString } from './bowerModulesSlice.utils';
 import { NetworkResponseStatus } from "./bowerModulesSlice.data";
 
 import {
@@ -24,6 +25,7 @@ const initialState: initialStateType = {
             recordsCount: 0,
             recordsPerPage: modulesTableConfig.recordsPerPage,
         },
+        currentSearchTerm: '',
         status: NetworkResponseStatus.idle,
         error: ''
     },
@@ -32,8 +34,15 @@ const initialState: initialStateType = {
 /*
     Load users data from the server
 */
-export const fetchBowerModules = createAsyncThunk('bower_modules/fetchBowerModules', async (searchTerm: string) => {
-    const url = `${resourceFetchConfig.apiEndpoint}=${searchTerm}&sort=stars&api_key=${resourceFetchConfig.apiKey}`;
+export const fetchBowerModules = createAsyncThunk('bower_modules/fetchBowerModules', async ({
+    searchTerm,
+    sortOrder = [],
+}: IFetchBowerModulesParams) => {
+    const sortString = buildSortingString({
+        incomingSortOrder: sortOrder
+    });
+    const sortUrlString = sortString ? `&sort=${sortString}` : '';
+    const url = `${resourceFetchConfig.apiEndpoint}=${searchTerm}${sortUrlString}&api_key=${resourceFetchConfig.apiKey}`;
     const modulesData = await makeRequest({
         url
     });
@@ -46,7 +55,16 @@ export const fetchBowerModules = createAsyncThunk('bower_modules/fetchBowerModul
 export const bowerModulesSlice = createSlice({
     name: "bowerModulesSlice",
     initialState,
-    reducers: {},
+    reducers: {
+        paginateModulesTbl: (state, action: PayloadAction<number>) => {
+            const page = action.payload;
+            state.modules.pagination.currentPage = page;
+        },
+        setCurrentSearchTerm: (state, action: PayloadAction<string>) => {
+            const currentSearchTerm = action.payload;
+            state.modules.currentSearchTerm = currentSearchTerm;
+        },
+    },
     extraReducers(builder) {
         builder
             .addCase(fetchBowerModules.pending, (state) => {
@@ -59,7 +77,7 @@ export const bowerModulesSlice = createSlice({
             .addCase(fetchBowerModules.fulfilled, (state, action: PayloadAction<IBowerModules[]>) => {
                 state.modules.status = NetworkResponseStatus.succeeded;
                 const initModules = action.payload;
-                const mappedModules = initModules.slice(0, modulesTableConfig.recordsPerPage).map(moduleInstance => ({
+                const mappedModules = initModules.map(moduleInstance => ({
                     name: moduleInstance.name,
                     repository_url: moduleInstance.repository_url,
                     stars: moduleInstance.stars,
@@ -71,5 +89,10 @@ export const bowerModulesSlice = createSlice({
 });
 
 export const selectData = (state: RootState) => state.bowerModulesSlice;
+
+export const {
+    paginateModulesTbl,
+    setCurrentSearchTerm,
+} = bowerModulesSlice.actions;
 
 export default bowerModulesSlice.reducer;

@@ -9,7 +9,7 @@ export const SearchForm = ({
     const searchInputElement = useRef<HTMLInputElement>(null);
     const submitSearch = (event: React.ChangeEvent<HTMLFormElement>): void => {
         event.preventDefault();
-        const searchTerm = searchInputElement.current?.value;
+        const searchTerm = searchInputElement.current?.value || '';
         onSubmitSearch(searchTerm);
     }
     return (

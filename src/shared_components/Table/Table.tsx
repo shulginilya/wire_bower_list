@@ -21,7 +21,7 @@ export const Table = ({
                     key={tblHeaderKey}
                     className={styles.table__headers__cell}
                 >
-                    {header.title}
+                    {header.onRender ? header.onRender() : header.title}
                 </th>
             )
         })

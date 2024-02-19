@@ -1,0 +1,37 @@
+@use '@/styles/variables' as *;
+
+@mixin active_link {
+    opacity: 1;
+}
+
+.table_sort_cell {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    &__actions {
+        display: flex;
+        margin-left: 15px;
+        &__btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 30px;
+            padding: 0 10px;
+            color: $white;
+            text-decoration: none;
+            background-color: $blue;
+            border-radius: 4px;
+            opacity: .5;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            &:hover {
+                @include active_link();
+            }
+            &:first-child {
+                margin-right: 5px;
+            }
+        }
+    }
+}

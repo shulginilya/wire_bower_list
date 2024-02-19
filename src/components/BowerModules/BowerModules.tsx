@@ -1,10 +1,14 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
+import { modulesTableConfig } from '@/config';
 import {
     Pagination,
     Table,
     SearchForm,
     Spinner,
+    TableSortCell,
 } from "@/shared_components";
+
+import type { ISortColumnParams } from "@/shared_components";
 
 import {
     useAppDispatch,
@@ -12,6 +16,8 @@ import {
 } from "@/appStore/hooks";
 import {
 	fetchBowerModules,
+    paginateModulesTbl,
+    setCurrentSearchTerm,
     selectData,
 } from "@/appStore/reducers/bowerModulesSlice";
 import { NetworkResponseStatus } from "@/appStore/reducers/bowerModulesSlice.data";
@@ -22,23 +28,43 @@ export const BowerModules = (): JSX.Element => {
     const dispatch = useAppDispatch();
     const { modules } = useAppSelector(selectData);
     /*
-        Fetch initial data
-        !!! refactor that , avoid double server hit !!!
+        Sync modules
     */
     useEffect(() => {
-        dispatch(fetchBowerModules(''));
-    }, []);
+        dispatch(fetchBowerModules({
+            searchTerm: modules.currentSearchTerm
+        }));
+    }, [modules.currentSearchTerm]);
     /*
         Search form submit handler
     */
-    const onSubmitSearchHandler = (searchTerm: string | undefined): void => {
-        if (searchTerm) {
-            dispatch(fetchBowerModules(searchTerm));
-        }
+    const onSubmitSearchHandler = (searchTerm: string): void => {
+        dispatch(setCurrentSearchTerm(searchTerm));
+    };
+    /*
+        Paginatiton click handler
+    */
+    const onPaginateHandler = (page: number): void => {
+        dispatch(paginateModulesTbl(page));
+    };
+    /*
+        Table sort action handler
+    */
+    const onSortHandler = ({ name, sortOrder }: ISortColumnParams): void => {
+        dispatch(fetchBowerModules({
+            searchTerm: modules.currentSearchTerm,
+            sortOrder: [
+                {
+                    name,
+                    order: sortOrder,    
+                }
+            ]
+        }));
     };
     /*
         Modules table props
     */
+    const tableItems = modules.data.slice((modules.pagination.currentPage - 1) * modulesTableConfig.recordsPerPage, modulesTableConfig.recordsPerPage * modules.pagination.currentPage);
     const tableProps = {
         headers: [
             {
@@ -52,10 +78,25 @@ export const BowerModules = (): JSX.Element => {
             {
                 key: "stars",
                 title: "Stars",
+                onRender: () => {
+                    const starsHeaderCellProps = {
+                        name: 'stars',
+                        title: 'Stars',
+                        onSort: onSortHandler
+                    };
+                    return <TableSortCell { ...starsHeaderCellProps } />;
+                }
             }
         ],
-        items: modules.data,
+        items: tableItems,
         resourseName: 'modules',
+    };
+    /*
+        Pagination component props
+    */
+    const paginationProps = {
+        ...modules.pagination,
+        onPaginateHandler,
     };
     return (
         <div
@@ -73,7 +114,7 @@ export const BowerModules = (): JSX.Element => {
                         <div className={styles.bower_modules__tbl}>
                             <Table { ...tableProps } />
                         </div>
-                        <Pagination { ...modules.pagination } />
+                        <Pagination { ...paginationProps } />
                     </>
                 )
             }
