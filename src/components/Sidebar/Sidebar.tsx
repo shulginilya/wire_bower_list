@@ -4,7 +4,6 @@ import styles from './sidebar.module.scss';
 
 export const Sidebar = (): JSX.Element => {
     const navigate = useNavigate();
-
     return (
         <div
             className={styles.sidebar}

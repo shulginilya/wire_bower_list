@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import type {
     ITableSortCell,
     ISortColumnParams,
@@ -10,14 +11,13 @@ export const TableSortCell = ({
     title,
     onSort
 }: ITableSortCell): JSX.Element => {
-    const sortColumn = ({ name, sortOrder }: ISortColumnParams): void => {
+    const sortColumn = useCallback(({ name, sortOrder }: ISortColumnParams): void => {
         const sortParams = {
             name,
             sortOrder
         };
         onSort(sortParams);
-    };
-
+    }, [onSort]);
     return (
         <div className={styles.table_sort_cell}>
             {title}

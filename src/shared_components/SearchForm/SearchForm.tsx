@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useCallback } from 'react';
 import type { ISearchFormProps } from './SearchForm.types';
 
 import styles from './search_form.module.scss';
@@ -7,11 +7,11 @@ export const SearchForm = ({
     onSubmitSearch
 }: ISearchFormProps): JSX.Element => {
     const searchInputElement = useRef<HTMLInputElement>(null);
-    const submitSearch = (event: React.ChangeEvent<HTMLFormElement>): void => {
+    const submitSearch = useCallback((event: React.ChangeEvent<HTMLFormElement>): void => {
         event.preventDefault();
         const searchTerm = searchInputElement.current?.value || '';
         onSubmitSearch(searchTerm);
-    }
+    }, [onSubmitSearch, searchInputElement.current?.value]);
     return (
         <form
             className={styles.search_form}

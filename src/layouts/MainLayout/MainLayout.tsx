@@ -3,12 +3,9 @@ import {
     Footer,
     Sidebar,
 } from '@/components';
+import type { IMainLayout } from './MainLayout.types';
 
 import styles from './main_layout.module.scss';
-
-interface IMainLayout {
-    children?: JSX.Element;
-};
 
 export const MainLayout = ({
     children

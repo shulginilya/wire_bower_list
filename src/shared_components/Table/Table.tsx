@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import type { IBowerModules } from '@/components';
 import type {
     ITableHeaders,
@@ -13,7 +14,7 @@ export const Table = ({
     /*
         Build table headers
     */
-    const renderTblHeaders = (): JSX.Element[] => (
+    const renderTblHeaders = useMemo((): JSX.Element[] => (
         headers.map((header: ITableHeaders) => {
             const tblHeaderKey = `${resourseName}_tbl_head_${header.key}`;
             return (
@@ -25,11 +26,11 @@ export const Table = ({
                 </th>
             )
         })
-    );
+    ), []);
     /*
         Build table rows
     */
-    const renderTblColumns = (): JSX.Element | JSX.Element[] => {
+    const renderTblColumns = useMemo((): JSX.Element | JSX.Element[] => {
         if (items.length === 0) {
             return (
                 <tr className={styles.table__empty}>
@@ -63,7 +64,7 @@ export const Table = ({
                 >{generateTblCells()}</tr>
             )
         })
-    };
+    }, [items]);
     return (
         <table
             className={styles.table}
@@ -71,11 +72,11 @@ export const Table = ({
         >
             <thead>
                 <tr className={styles.table__headers}>
-                    {renderTblHeaders()}
+                    {renderTblHeaders}
                 </tr>
             </thead>
             <tbody>
-                {renderTblColumns()}
+                {renderTblColumns}
             </tbody>
         </table>
     )

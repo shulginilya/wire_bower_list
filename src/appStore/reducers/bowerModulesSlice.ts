@@ -84,6 +84,7 @@ export const bowerModulesSlice = createSlice({
                 }));
                 state.modules.data = mappedModules;
                 state.modules.pagination.recordsCount = initModules.length;
+                state.modules.pagination.currentPage = 1;
             })
     }
 });

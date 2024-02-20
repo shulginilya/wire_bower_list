@@ -1,4 +1,8 @@
-import { useEffect } from 'react';
+import {
+    useMemo,
+    useCallback,
+    memo,
+} from 'react';
 import { modulesTableConfig } from '@/config';
 import {
     Pagination,
@@ -9,6 +13,10 @@ import {
 } from "@/shared_components";
 
 import type { ISortColumnParams } from "@/shared_components";
+import type {
+    ITable,
+    IPaginationComponent,
+} from '@/shared_components';
 
 import {
     useAppDispatch,
@@ -28,29 +36,24 @@ export const BowerModules = (): JSX.Element => {
     const dispatch = useAppDispatch();
     const { modules } = useAppSelector(selectData);
     /*
-        Sync modules
-    */
-    useEffect(() => {
-        dispatch(fetchBowerModules({
-            searchTerm: modules.currentSearchTerm
-        }));
-    }, [modules.currentSearchTerm]);
-    /*
         Search form submit handler
     */
-    const onSubmitSearchHandler = (searchTerm: string): void => {
+    const onSubmitSearchHandler = useCallback((searchTerm: string): void => {
         dispatch(setCurrentSearchTerm(searchTerm));
-    };
+        dispatch(fetchBowerModules({
+            searchTerm
+        }));
+    }, []);
     /*
         Paginatiton click handler
     */
-    const onPaginateHandler = (page: number): void => {
+    const onPaginateHandler = useCallback((page: number): void => {
         dispatch(paginateModulesTbl(page));
-    };
+    }, []);
     /*
         Table sort action handler
     */
-    const onSortHandler = ({ name, sortOrder }: ISortColumnParams): void => {
+    const onSortHandler = useCallback(({name, sortOrder}: ISortColumnParams): void => {
         dispatch(fetchBowerModules({
             searchTerm: modules.currentSearchTerm,
             sortOrder: [
@@ -60,12 +63,12 @@ export const BowerModules = (): JSX.Element => {
                 }
             ]
         }));
-    };
+    }, [modules.currentSearchTerm, dispatch]);
     /*
         Modules table props
     */
     const tableItems = modules.data.slice((modules.pagination.currentPage - 1) * modulesTableConfig.recordsPerPage, modulesTableConfig.recordsPerPage * modules.pagination.currentPage);
-    const tableProps = {
+    const tableProps = useMemo((): ITable => ({
         headers: [
             {
                 key: "name",
@@ -90,14 +93,20 @@ export const BowerModules = (): JSX.Element => {
         ],
         items: tableItems,
         resourseName: 'modules',
-    };
+    }), [tableItems]);
     /*
         Pagination component props
     */
-    const paginationProps = {
+    const paginationProps = useMemo((): IPaginationComponent => ({
         ...modules.pagination,
         onPaginateHandler,
-    };
+    }), [modules.pagination, onPaginateHandler]);
+    /*
+        Preloader component
+    */
+    const MemoizedSpinner = memo(() => (
+        <Spinner />
+    ));
     return (
         <div
             className={styles.bower_modules}
@@ -119,7 +128,7 @@ export const BowerModules = (): JSX.Element => {
                 )
             }
             {
-                modules.status === NetworkResponseStatus.loading && <Spinner />
+                modules.status === NetworkResponseStatus.loading && <MemoizedSpinner />
             }
         </div>
     )
