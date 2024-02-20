@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '@/utils';
 
 import { DemoPage } from './DemoPage';
 
@@ -9,7 +10,7 @@ jest.mock('react-router-dom', () => ({
 
 describe('Demo page', () => {
     it('should render demo page', () => {
-        render(<DemoPage />);
+        renderWithProviders(<DemoPage />);
         const demoPagePageWrapper = screen.getByTestId('demo_page_root');
         expect(demoPagePageWrapper).toBeInTheDocument();
     });

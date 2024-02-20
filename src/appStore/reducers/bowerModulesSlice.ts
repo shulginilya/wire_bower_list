@@ -53,7 +53,7 @@ export const fetchBowerModules = createAsyncThunk('bower_modules/fetchBowerModul
     Slice definition
 */
 export const bowerModulesSlice = createSlice({
-    name: "bowerModulesSlice",
+    name: "bowerModules",
     initialState,
     reducers: {
         paginateModulesTbl: (state, action: PayloadAction<number>) => {
@@ -89,7 +89,7 @@ export const bowerModulesSlice = createSlice({
     }
 });
 
-export const selectData = (state: RootState) => state.bowerModulesSlice;
+export const selectData = (state: RootState) => state.bowerModules;
 
 export const {
     paginateModulesTbl,
