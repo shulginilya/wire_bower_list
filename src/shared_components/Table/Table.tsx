@@ -10,6 +10,7 @@ export const Table = ({
     headers,
     items,
     resourseName,
+    itemTestId,
 }: ITable): JSX.Element => {
     /*
         Build table headers
@@ -61,6 +62,7 @@ export const Table = ({
                 <tr
                     key={tblRowKey}
                     className={styles.table__rows}
+                    data-testid={itemTestId}
                 >{generateTblCells()}</tr>
             )
         })

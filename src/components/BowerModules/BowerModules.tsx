@@ -93,6 +93,7 @@ export const BowerModules = (): JSX.Element => {
         ],
         items: tableItems,
         resourseName: 'modules',
+        itemTestId: 'module_table_item',
     }), [tableItems]);
     /*
         Pagination component props

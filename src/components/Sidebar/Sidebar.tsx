@@ -5,18 +5,21 @@ import styles from './sidebar.module.scss';
 export const Sidebar = (): JSX.Element => {
     const navigate = useNavigate();
     return (
-        <div
-            className={styles.sidebar}
-            data-testid="sidebar_root"
-        >
+        <div className={styles.sidebar}>
             <ul className={styles.sidebar__list}>
-                <li className={styles.sidebar__list__item}>
+                <li
+                    data-testid="sidebar_list_item"
+                    className={styles.sidebar__list__item}
+                >
                     <button
                         className={styles.sidebar__list__item__link}
                         onClick={() => navigate('/')}
                     >Home</button>
                 </li>
-                <li className={styles.sidebar__list__item}>
+                <li
+                    data-testid="sidebar_list_item"
+                    className={styles.sidebar__list__item}
+                >
                     <button
                         className={styles.sidebar__list__item__link}
                         onClick={() => navigate('/demo')}

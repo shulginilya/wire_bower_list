@@ -1,7 +1,10 @@
 import type { IBowerModules } from "@/components";
 import type { initialStateType, IFetchBowerModulesParams } from "./bowerModulesSlice.types";
 import { buildSortingString } from './bowerModulesSlice.utils';
-import { NetworkResponseStatus } from "./bowerModulesSlice.data";
+import {
+    NetworkResponseStatus,
+    bowerModulesInitState,
+} from "./bowerModulesSlice.data";
 
 import {
     createSlice,
@@ -12,24 +15,12 @@ import {
 import { RootState } from "@/appStore/store";
 
 import { makeRequest } from "@/utils";
-import { resourceFetchConfig, modulesTableConfig } from '@/config';
+import { resourceFetchConfig } from '@/config';
 
 /*
     We define state structure
 */
-const initialState: initialStateType = {
-    modules: {
-        data: [],
-        pagination: {
-            currentPage: 1,
-            recordsCount: 0,
-            recordsPerPage: modulesTableConfig.recordsPerPage,
-        },
-        currentSearchTerm: '',
-        status: NetworkResponseStatus.idle,
-        error: ''
-    },
-};
+const initialState: initialStateType = bowerModulesInitState;
 
 /*
     Load users data from the server

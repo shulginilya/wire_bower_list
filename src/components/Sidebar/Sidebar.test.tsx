@@ -10,7 +10,7 @@ jest.mock('react-router-dom', () => ({
 describe('Sidebar', () => {
     it('should render sidebar', () => {
         render(<Sidebar />);
-        const sidebarWrapper = screen.getByTestId('sidebar_root');
-        expect(sidebarWrapper).toBeInTheDocument();
+        const listItems = screen.getAllByTestId("sidebar_list_item");
+        expect(listItems.length).toEqual(2);
     });
 });

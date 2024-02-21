@@ -10,4 +10,5 @@ export interface ITable {
     headers: ITableHeaders[];
     items: IBowerModules[];
     resourseName: string;
+    itemTestId: string;
 };

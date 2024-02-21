@@ -22,10 +22,12 @@ export const SearchForm = ({
                 className={styles.search_form__input}
                 ref={searchInputElement}
                 type="text"
+                data-testid="search_form_input"
             />
             <button
                 type="submit"
                 className={styles.search_form__btn}
+                data-testid="search_form_btn"
             >search</button>
         </form>
     )
