@@ -25,6 +25,7 @@ export const Pagination = ({
             <li
                 key={`page_${page}`}
                 className={styles.pagination__list__item}
+                data-testid="pagination_pages"
             >
                 <button
                     className={(currentPage === page) ? `${styles.pagination__list__item__link} ${styles.pagination__list__item__link_active}` : styles.pagination__list__item__link}

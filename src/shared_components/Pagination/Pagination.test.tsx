@@ -1,19 +1,51 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
+import { renderWithProviders } from '@/utils';
 
+import { bowerModulesInitState } from '@/appStore/reducers/bowerModulesSlice.data';
 import { Pagination } from './Pagination';
 
 describe('Modules table pagination', () => {
     const onSubmitSearchHandlerMock = jest.fn();
+    
+    const emptyDataProps = {
+        recordsCount: 0,
+    };
 
-    it('should render modules table pagination', () => {
-        const testModulesTablePaginationProps = {
-            currentPage: 1,
-            recordsCount: 0,
-            recordsPerPage: 0,
-            onPaginateHandler: onSubmitSearchHandlerMock,
+    const noneEmptyDataProps = {
+        recordsCount: 30,
+    };
+
+    it('should render pagination with none empty data', () => {
+        const paginationProps = {
+            ...bowerModulesInitState.modules.pagination,
+            ...noneEmptyDataProps,
+            ...{
+                onPaginateHandler: onSubmitSearchHandlerMock,
+            }
         };
-        render(<Pagination {...testModulesTablePaginationProps} />);
-        const modulesTablePaginationWrapper = screen.getByTestId('modules_pagination_root');
-        expect(modulesTablePaginationWrapper).toBeInTheDocument();
+        renderWithProviders(<Pagination {...paginationProps} />, {
+            preloadedState: {
+                bowerModules: bowerModulesInitState
+            }
+        });
+        const pages = screen.getAllByTestId('pagination_pages');
+        expect(pages.length).toBeGreaterThan(0);
+    });
+
+    it('should not render pagination when there are no data available', () => {
+        const paginationProps = {
+            ...bowerModulesInitState.modules.pagination,
+            ...emptyDataProps,
+            ...{
+                onPaginateHandler: onSubmitSearchHandlerMock,
+            }
+        };
+        renderWithProviders(<Pagination {...paginationProps} />, {
+            preloadedState: {
+                bowerModules: bowerModulesInitState
+            }
+        });
+        const pages = screen.queryByTestId('pagination_pages');
+        expect(pages).toBe(null);
     });
 });
