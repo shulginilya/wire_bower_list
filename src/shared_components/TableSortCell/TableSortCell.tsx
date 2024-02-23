@@ -19,7 +19,10 @@ export const TableSortCell = ({
         onSort(sortParams);
     }, [onSort]);
     return (
-        <div className={styles.table_sort_cell}>
+        <div
+            data-testid="table_sort_cell"
+            className={styles.table_sort_cell}
+        >
             {title}
             <div className={styles.table_sort_cell__actions}>
                 <button
@@ -27,6 +30,7 @@ export const TableSortCell = ({
                         name,
                         sortOrder: 'asc'
                     })}
+                    data-testid="tbl_sort_desc_asc"
                     className={styles.table_sort_cell__actions__btn}
                 >orig</button>
                 <button
@@ -34,6 +38,7 @@ export const TableSortCell = ({
                         name,
                         sortOrder: 'desc'
                     })}
+                    data-testid="tbl_sort_desc_btn"
                     className={styles.table_sort_cell__actions__btn}
                 >desc</button>
             </div>
